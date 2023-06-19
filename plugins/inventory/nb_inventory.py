@@ -2042,5 +2042,6 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         self.dns_name = self.get_option("dns_name")
         self.ansible_host_dns_name = self.get_option("ansible_host_dns_name")
         self.racks = self.get_option("racks")
+        self.custom_domain = self.get_option("custom_domain")
 
         self.main()
