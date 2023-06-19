@@ -235,6 +235,11 @@ DOCUMENTATION = """
             type: boolean
             default: True
             version_added: "3.6.0"
+        custom_domain:
+            description:
+                - When domain is set as a custom field, append it to the device hostname to form a FQDN.
+            type: boolean
+            default: False           
 """
 
 EXAMPLES = """
@@ -1656,8 +1661,10 @@ class InventoryModule(BaseInventoryPlugin, Constructable, Cacheable):
         # Use virtual chassis name if set by the user.
         if self.virtual_chassis_name and self._get_host_virtual_chassis_master(host):
             return host["virtual_chassis"]["name"] or str(uuid.uuid4())
-        else:
-            return host["name"] or str(uuid.uuid4())
+        elif self.custom_domain:
+            domain = host["custom_fields"]["domain"]
+            hostname = host["name"]
+            return f"{hostname}.{domain}" or str(uuid.uuid4())
 
     def generate_group_name(self, grouping, group):
         # Check for special case - if group is a boolean, just return grouping name instead
